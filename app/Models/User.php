@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -45,4 +46,26 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+     public function colocation(){
+        return $this->belongsToMany(Colocation::class, 'colocation_user')->withPivot('role');
+    }
+    public function expenses()
+    {
+        return $this->hasMany(Expence::class, 'paid_by');
+    }
+
+    public function paymentsSent()
+    {
+        return $this->hasMany(Payment::class, 'payer_id');
+    }
+
+    public function paymentsReceived()
+    {
+        return $this->hasMany(Payment::class, 'receiver_id');
+    }
+    public function whoshares(){
+        return $this->belongsToMany(Expence::class, 'shares')->withPivot('amount');
+    }
+
 }
