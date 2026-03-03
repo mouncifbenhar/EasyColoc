@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Category extends Model
+{
+
+    protected $fillable = [
+       'title',
+       'colocation_id'
+    ];
+    public function colocation(){
+        return $this->belongsTo(Colocation::class,'colocation_id');
+    }
+
+}
